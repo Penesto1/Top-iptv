@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>📺 Meu IPTV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial; background: #1a1a2e; color: white; padding: 20px; }
+        h1 { text-align: center; color: #00adb5; }
+        .channel { background: #0f3460; margin: 10px 0; padding: 15px; border-radius: 10px; }
+        .play-btn { background: #00adb5; color: white; border: none; padding: 8px 15px; border-radius: 5px; }
+        #player { width: 100%; height: 250px; background: black; display: none; }
+        .back-btn { background: #e94560; color: white; border: none; padding: 10px; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Meus Canais</h1>
+    <div id="lista"></div>
+    <video id="player" controls></video>
+    
+    <script>
+        // EDITE SUA LISTA AQUI!
+        const canais = [
+            { nome: "TV Cultura", url: "https://exemplo1.com/stream.m3u8" },
+            { nome: "TV Brasil", url: "https://exemplo2.com/stream.m3u8" }
+        ];
+        
+        function carregarCanais() {
+            let html = '';
+            canais.forEach((canal, i) => {
+                html += `<div class="channel">
+                    ${canal.nome}
+                    <button class="play-btn" onclick="play(${i})">▶ PLAY</button>
+                </div>`;
+            });
+            document.getElementById('lista').innerHTML = html;
+        }
+        
+        function play(index) {
+            document.getElementById('lista').style.display = 'none';
+            const player = document.getElementById('player');
+            player.style.display = 'block';
+            player.src = canais[index].url;
+            player.load();
+            
+            // Adicionar botão voltar
+            if (!document.querySelector('.back-btn')) {
+                const btn = document.createElement('button');
+                btn.className = 'back-btn';
+                btn.innerHTML = '← VOLTAR';
+                btn.onclick = () => {
+                    player.pause();
+                    player.style.display = 'none';
+                    document.getElementById('lista').style.display = 'block';
+                    btn.remove();
+                };
+                player.after(btn);
+            }
+        }
+        
+        window.onload = carregarCanais;
+    </script>
+</body>
+</html>
